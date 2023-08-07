@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "c8ee1967-bdd5-4c67-9278-e888d87246b9",
+		"name": "Credco API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20817934"
+	},
+	"item": [
+		{
+			"name": "Get Credit Scores",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "client_id",
+						"value": "eb5ef25afc704758b65db4e644842520",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\": \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+				},
+				"url": {
+					"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore",
+					"protocol": "https",
+					"host": [
+						"limaone-elphi-credco-proxy-api",
+						"us-e1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"credit",
+						"v1",
+						"creditscore"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Credit Scores",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"value": "eb5ef25afc704758b65db4e644842520",
+								"type": "text"
+							},
+							{
+								"key": "client_secret",
+								"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"party\": {\r\n      \"borrowerFirstName\": \"John\",\r\n      \"borrowerMiddleName\": \"Quinton\",\r\n      \"borrowerLastName\": \"Homeowner\",\r\n      \"borrowerNameSuffix\": \"Jr\",\r\n      \"borrowerSSN\": \"999405000\",\r\n      \"borrowerDOB\": \"1975-02-12\",\r\n      \"borrowerAddress\": {\r\n         \"streetPrimaryNumberText\": \"175\",\r\n         \"streetName\": \"13th\",\r\n         \"streetSuffixText\": \"ST\",\r\n         \"streetCity\": \"Washington\",\r\n         \"streetStateCode\": \"DC\",\r\n         \"streetPostalCode\": \"20013\",\r\n         \"countryCode\": \"US\"\r\n      }\r\n\r\n   },\r\n   \"SoftPull\": true,\r\n   \"CreditReports\": {\r\n      \"includeEquifax\": true,\r\n      \"includeExperian\": true,\r\n      \"includeTransUnion\": true\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore",
+							"protocol": "https",
+							"host": [
+								"limaone-elphi-credco-proxy-api",
+								"us-e1",
+								"cloudhub",
+								"io"
+							],
+							"path": [
+								"api",
+								"credit",
+								"v1",
+								"creditscore"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 20 Apr 2023 09:01:29 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Content-Length",
+							"value": "249"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"creditScores\": {\n        \"Experian\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+785\"\n        },\n        \"Equifax\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+760\"\n        },\n        \"Transun\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+779\"\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Credit Scores local",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "client_id",
+						"value": "eb5ef25afc704758b65db4e644842520",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\": \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:8082/api/credit/v1/creditscore",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"credit",
+						"v1",
+						"creditscore"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Credit Scores",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"value": "eb5ef25afc704758b65db4e644842520",
+								"type": "text"
+							},
+							{
+								"key": "client_secret",
+								"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"party\": {\r\n      \"borrowerFirstName\": \"John\",\r\n      \"borrowerMiddleName\": \"Quinton\",\r\n      \"borrowerLastName\": \"Homeowner\",\r\n      \"borrowerNameSuffix\": \"Jr\",\r\n      \"borrowerSSN\": \"999405000\",\r\n      \"borrowerDOB\": \"1975-02-12\",\r\n      \"borrowerAddress\": {\r\n         \"streetPrimaryNumberText\": \"175\",\r\n         \"streetName\": \"13th\",\r\n         \"streetSuffixText\": \"ST\",\r\n         \"streetCity\": \"Washington\",\r\n         \"streetStateCode\": \"DC\",\r\n         \"streetPostalCode\": \"20013\",\r\n         \"countryCode\": \"US\"\r\n      }\r\n\r\n   },\r\n   \"SoftPull\": true,\r\n   \"CreditReports\": {\r\n      \"includeEquifax\": true,\r\n      \"includeExperian\": true,\r\n      \"includeTransUnion\": true\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore",
+							"protocol": "https",
+							"host": [
+								"limaone-elphi-credco-proxy-api",
+								"us-e1",
+								"cloudhub",
+								"io"
+							],
+							"path": [
+								"api",
+								"credit",
+								"v1",
+								"creditscore"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 20 Apr 2023 09:01:29 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Content-Length",
+							"value": "249"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"creditScores\": {\n        \"Experian\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+785\"\n        },\n        \"Equifax\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+760\"\n        },\n        \"Transun\": {\n            \"date\": \"2023-04-17\",\n            \"Score\": \"+779\"\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Credit Report",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "client_id",
+						"value": "eb5ef25afc704758b65db4e644842520",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\" : \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+				},
+				"url": {
+					"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/report",
+					"protocol": "https",
+					"host": [
+						"limaone-elphi-credco-proxy-api",
+						"us-e1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"credit",
+						"v1",
+						"report"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Credit Report",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"value": "eb5ef25afc704758b65db4e644842520",
+								"type": "text"
+							},
+							{
+								"key": "client_secret",
+								"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"SoftPull\": true,\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\" : \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+						},
+						"url": {
+							"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/report",
+							"protocol": "https",
+							"host": [
+								"limaone-elphi-credco-proxy-api",
+								"us-e1",
+								"cloudhub",
+								"io"
+							],
+							"path": [
+								"api",
+								"credit",
+								"v1",
+								"report"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get Credit Report Local",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "client_id",
+						"value": "eb5ef25afc704758b65db4e644842520",
+						"type": "text"
+					},
+					{
+						"key": "client_secret",
+						"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\": \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:8082/api/credit/v1/report",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"credit",
+						"v1",
+						"report"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Credit Report",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"value": "eb5ef25afc704758b65db4e644842520",
+								"type": "text"
+							},
+							{
+								"key": "client_secret",
+								"value": "Bc9D0f5Ce0344130bc0552D53093c0de",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"party\": {\r\n        \"borrowerFirstName\": \"John\",\r\n        \"borrowerMiddleName\": \"Quinton\",\r\n        \"borrowerLastName\": \"Homeowner\",\r\n        \"borrowerNameSuffix\": \"Jr\",\r\n        \"borrowerSSN\": \"999405000\",\r\n        \"borrowerDOB\": \"1975-02-12\",\r\n        \"borrowerAddress\": {\r\n            \"streetPrimaryNumberText\": \"175\",\r\n            \"streetName\": \"13th\",\r\n            \"streetSuffixText\": \"ST\",\r\n            \"streetCity\": \"Washington\",\r\n            \"streetStateCode\": \"DC\",\r\n            \"streetPostalCode\": \"20013\",\r\n            \"countryCode\": \"US\"\r\n        }\r\n    },\r\n    \"SoftPull\": true,\r\n    \"CreditReports\": {\r\n        \"includeEquifax\": true,\r\n        \"includeExperian\": true,\r\n        \"includeTransUnion\": true\r\n    },\r\n    \"loanIdentifier\": \"Loan1234\",\r\n    \"loanIdentiferType\": \"LenderCase\",\r\n    \"loanOriginationSystemName\": \"LOCLOS\",\r\n    \"partyRoleType\": \"Borrower\",\r\n    \"creditReportRequestActionType\": \"Submit\",\r\n    \"creditReportType\": \"Other\",\r\n    \"creditReportTypeOtherDescription\" : \"Prequal\",\r\n    \"reportingInformationIdentifier\": \"GG000283\",\r\n    \"reportingInformationName\": \"GlobalGatewayLenderIdentifier\"\r\n}"
+						},
+						"url": {
+							"raw": "https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/report",
+							"protocol": "https",
+							"host": [
+								"limaone-elphi-credco-proxy-api",
+								"us-e1",
+								"cloudhub",
+								"io"
+							],
+							"path": [
+								"api",
+								"credit",
+								"v1",
+								"report"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	]
+}
