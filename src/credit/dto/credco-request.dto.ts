@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, ValidateNested } from 'class-validator';
+import { IsString, IsDateString, IsBoolean, ValidateNested } from 'class-validator';
 
 class PartyDto {
 
@@ -63,36 +63,12 @@ class CreditReportsDto {
 
 }
 
-export class CreditRequestDto {
-
-  @IsString()
-  borrowerFirstName: string;
-
-  @IsString()
-  borrowerMiddleName: string;
-
-  @IsString()
-  borrowerLastName: string;
-
-  @IsString()
-  borrowerNameSuffix: string;
-
-  @IsString()
-  borrowerSSN: string;
-
-  @IsString()
-  borrowerDOB: string;
-
-  @ValidateNested()
-  borrowerAddress: BorrowerAddressDto;
-
-  @ValidateNested()
-  CreditReports: CreditReportsDto;
+export class CredcoRequestDto {
 
   @IsString()
   loanIdentifier: string;
 
-  @IsString()
+  @IsString() 
   loanIdentifierType: string;
 
   @IsString()
@@ -108,12 +84,51 @@ export class CreditRequestDto {
   creditReportType: string;
 
   @IsString()
-  creditReportTypeOtherDescription: string;
-
-  @IsString()
   reportingInformationIdentifier: string;
 
   @IsString()
   reportingInformationName: string;
 
+  @IsString()
+  legalEntityName: string;
+
+  @IsString()
+  requestingPartyRoleType: string;
+   
+  @IsString()
+  loginAccountIdentifier: string;
+
+  @IsString()
+  loginAccountPassword: string;
+
+  // Add borrower details
+  @IsString()
+  borrowerFirstName: string;
+
+  @IsString()
+  borrowerLastName: string;
+
+  @IsString()
+  borrowerMiddleName: string;
+
+  @IsDateString()
+  borrowerBirthDate: string;
+
+  // Add address fields
+  @IsString()
+  streetName: string;
+
+  @IsString()
+  streetNumber: string;
+
+  @IsString()
+  streetCity: string;
+
+  @IsString()
+  streetStateCode: string;
+
+  @IsString()
+  streetPostalCode: string;
+
 }
+
