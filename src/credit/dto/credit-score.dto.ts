@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, ValidateNested, IsUUID } from 'class-validator';
+import { IsString, IsBoolean, IsDateString, ValidateNested, IsUUID } from 'class-validator';
 import { PipeTransform, Injectable, ParseIntPipe, ParseBoolPipe } from '@nestjs/common';
 
 class CreditScoreDto {
@@ -63,39 +63,63 @@ class CreditReportsDto {
   
 export class CreditScoreRequestDto {
 
-@IsString()
-borrowerSSN: string;
+  @IsUUID()
+  loanId: string;
 
-@IsString()
-borrowerDOB: string;
+  @IsString()
+  loanType: string;
 
-@ValidateNested()
-borrowerAddress: BorrowerAddressDto;
+  @IsString()
+  loanOriginationSystemName: string;
 
-@ValidateNested()
-creditReports: CreditReportsDto;
+  @IsString()
+  firstName: string;
 
-@IsUUID('4')
-@IsString()
-loanIdentifier: string;
+  @IsString()
+  lastName: string;
 
-@IsString()
-loanIdentifierType: string;
+  @IsString() 
+  middleName: string;
 
-@IsString()
-loanOriginationSystemName: string;
+  @IsDateString()
+  birthDate: string;
 
-@IsString()
-creditReportRequestActionType: string;
+  @IsString()
+  streetNumber: string;
 
-@IsString()
-creditReportType: string;
+  @IsString()
+  streetName: string;
 
-@IsString() 
-reportingInformationIdentifier: string;
+  @IsString()
+  streetSuffix: string;
 
-@IsString()
-reportingInformationName: string;
+  @IsString()
+  city: string;
+
+  @IsString()
+  stateCode: string;
+
+  @IsString()
+  postalCode: string;
+
+  @IsString()
+  countryCode: string;
+
+  @IsString()
+  ssn: string;
+
+  @IsString()
+  legalEntityName: string;
+
+  @IsString()
+  requestedByName: string;
+
+  @IsString()
+  loginAccountIdentifier: string;
+
+  @IsString()
+  loginAccountPassword: string;
 
 }
+
 
