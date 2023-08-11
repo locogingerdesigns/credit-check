@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import axios from 'axios';
 import * as xml2js from 'xml2js';
 import { CreditScoreRequestDto } from './dto/credit-score.dto';
 
@@ -25,33 +26,40 @@ export class CreditScoreService {
   }
 
   async getScore(requestData: CreditScoreRequestDto) {
+
     // Get OAuth token
     const token = await this.getOAuthToken();
-
+  
     // Set Authorization header with bearer token
     const headers = {
-      Authorization: `Bearer ${token}` 
+      Authorization: `Bearer ${token}`
     };
-
+  
     const body = this.buildRequestBody(requestData);
-    
+  
     try {
-      // Make API request
-      const response = await this.httpService.post('/creditscore', body).toPromise();
-    
+      // Make API request to correct endpoint 
+      const response = await this.httpService.post('https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore', body).toPromise();
+
+      // Pass raw XML to transform
+      const xml = this.transformScore(response.data); 
+
+      return xml;
+  
       // Parse XML response
-      const parsedResponse = this.parseXmlResponse(response.data);
-
-      // Transform to CreditScore model
-      const score = this.transformScore(parsedResponse);
-
-      return score;
-
+      // const parsedResponse = this.parseXmlResponse(response.data);
+  
+      // Transform to CreditScore model 
+      // const score = this.transformScore(parsedResponse);
+  
+      // return score;
+  
     } catch (error) {
-      throw new HttpException('Error getting credit score', HttpStatus.INTERNAL_SERVER_ERROR); 
+      throw new HttpException('Error getting credit score', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   
   }
+  
 
 
   buildRequestBody(requestData: CreditScoreRequestDto) {
@@ -262,21 +270,14 @@ export class CreditScoreService {
   
   }
   
-
-  transformScore(rawScore: number): CreditScore {
-
-    // Map raw score to CreditScore model
-
-    const score = new CreditScore();
-    score.value = rawScore;
-
-    return score;
-
+  transformScore(rawXml: string): string {
+    return rawXml; 
   }
+  
 
 }
 
 // Credit score model
-export class CreditScore {
-  value: number;
-}
+// export class CreditScore {
+//   value: number;
+// }
