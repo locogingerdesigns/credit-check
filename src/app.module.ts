@@ -1,17 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
-import { CreditController } from './credit/credit.controller';
-import { CreditReportController } from './credit/credit-report.controller';
+import { CreditScoreModule } from './credit/credit-score.module';
+import { CreditReportModule } from './credit/credit-report.module';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController, 
-    CreditController, 
-    CreditReportController
-  ],
-  providers: [AppService],
+  imports: [CreditScoreModule, CreditReportModule],
 })
 export class AppModule {}

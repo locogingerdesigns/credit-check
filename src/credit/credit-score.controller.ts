@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { CreditScoreService } from './credit-score.service';
 import { CreditScoreRequestDto } from './dto/credit-score.dto';
 
@@ -9,14 +9,20 @@ export class CreditScoreController {
 
   @Post()
   async getCreditScore(@Body() body: CreditScoreRequestDto) {
-    
-    const score = await this.creditScoreService.getScore(body);
+    try {
+      const scoreXml = await this.creditScoreService.getScore(body);
 
-    return {
-      statusCode: HttpStatus.OK,  
-      score: score
-    };
+      // You can parse the XML response and extract relevant data here
+      // For example: const parsedScore = this.creditScoreService.parseXmlResponse(scoreXml);
 
+      return {
+        statusCode: HttpStatus.OK,
+        // Include parsedScore or other relevant data if needed
+        xmlResponse: scoreXml,
+      };
+    } catch (error) {
+      // Handle errors gracefully and return appropriate error response
+      throw new HttpException('Error retrieving credit score', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
-
 }
