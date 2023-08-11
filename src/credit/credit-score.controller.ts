@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { CreditScoreService } from './credit-score.service';
-import { CreditScoreRequestDto } from './dto/credit-score.dto';
+import { CredcoRequestDto } from './dto/credco.dto';
 
 @Controller('credit-score')
 export class CreditScoreController {
@@ -8,7 +8,7 @@ export class CreditScoreController {
   constructor(private creditScoreService: CreditScoreService) {}
 
   @Post()
-  async getCreditScore(@Body() body: CreditScoreRequestDto) {
+  async getCreditScore(@Body() body: CredcoRequestDto) {
     try {
       const scoreXml = await this.creditScoreService.getScore(body);
 

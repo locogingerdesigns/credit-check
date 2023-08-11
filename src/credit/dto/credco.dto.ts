@@ -61,7 +61,7 @@ class CreditReportsDto {
   
 }
   
-export class CreditScoreRequestDto {
+export class CredcoRequestDto {
 
   @IsUUID()
   loanId: string;

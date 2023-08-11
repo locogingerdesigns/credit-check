@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 import * as xml2js from 'xml2js';
-import { CreditScoreRequestDto } from './dto/credit-score.dto';
+import { CredcoRequestDto } from './dto/credco.dto';
 
 @Injectable()
 export class CreditScoreService {
@@ -25,7 +25,7 @@ export class CreditScoreService {
   
   }
 
-  async getScore(requestData: CreditScoreRequestDto) {
+  async getScore(requestData: CredcoRequestDto) {
 
     // Get OAuth token
     const token = await this.getOAuthToken();
@@ -62,7 +62,7 @@ export class CreditScoreService {
   
 
 
-  buildRequestBody(requestData: CreditScoreRequestDto) {
+  buildRequestBody(requestData: CredcoRequestDto) {
 
     const xml = `
       <ns0:MESSAGE>

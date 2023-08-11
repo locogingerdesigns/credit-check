@@ -1,7 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as xml2js from 'xml2js';
-import { CreditScoreRequestDto } from './dto/credit-score.dto';
+import * as pdfjs from 'pdfjs-dist/es5/build/pdf'; 
+import { CredcoRequestDto } from './dto/credco.dto';
 
 @Injectable()
 export class CreditReportService {
@@ -24,7 +25,7 @@ export class CreditReportService {
   
   }
 
-  async getReport(requestData: CreditScoreRequestDto) {
+  async getReport(requestData: CredcoRequestDto) {
     // Get OAuth token
     const token = await this.getOAuthToken();
 
@@ -37,7 +38,7 @@ export class CreditReportService {
     
     try {
       // Make API request
-      const response = await this.httpService.post('/report', body).toPromise();
+      const response = await this.httpService.post('https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/report', body).toPromise();
     
       // Parse XML response
       const parsedResponse = this.parseXmlResponse(response.data);
@@ -54,7 +55,7 @@ export class CreditReportService {
   }
 
 
-  buildRequestBody(requestData: CreditReportRequestDto) {
+  buildRequestBody(requestData: CredcoRequestDto) {
 
     const xml = `
       <ns0:MESSAGE>
