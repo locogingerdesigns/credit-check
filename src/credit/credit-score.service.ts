@@ -1,66 +1,72 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import axios from 'axios';
 import * as xml2js from 'xml2js';
 import { CredcoRequestDto } from './dto/credco.dto';
 
 @Injectable()
 export class CreditScoreService {
 
+  private readonly logger = new Logger(CreditScoreService.name);
+
   constructor(private httpService: HttpService) {}
 
-  async getOAuthToken() {
-
-    try {
-  
-      const tokenResponse = await this.httpService.post('/oauth/token', {
-        grant_type: 'client_credentials'
-      }).toPromise();
-  
-      return tokenResponse.data.access_token;
-  
-    } catch (error) {
-      throw new HttpException('Error getting OAuth token', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  
-  }
-
   async getScore(requestData: CredcoRequestDto) {
-
-    // Get OAuth token
-    const token = await this.getOAuthToken();
-  
-    // Set Authorization header with bearer token
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
-  
-    const body = this.buildRequestBody(requestData);
-  
     try {
+
+        // Get OAuth token
+        const token = await this.getOAuthToken();
+
+        // Set Authorization header with bearer token
+        const headers = {
+        Authorization: `Bearer ${token}`
+        };
+
+        const body = this.buildRequestBody(requestData);
+
+    
       // Make API request to correct endpoint 
       const response = await this.httpService.post('https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore', body).toPromise();
 
-      // Pass raw XML to transform
-      const xml = this.transformScore(response.data); 
+      // Log the JSON response for debugging
+      this.logger.log('Corelogic API Response:', response.data);
 
-      return xml;
-  
-      // Parse XML response
-      // const parsedResponse = this.parseXmlResponse(response.data);
-  
-      // Transform to CreditScore model 
-      // const score = this.transformScore(parsedResponse);
-  
-      // return score;
-  
+      // Format JSON response to XML
+      const xml = this.jsonToXml(response.data);
+
+      // Send formatted XML to Credco API and handle the response
+      const credcoResponse = await this.sendXmlToCredco(xml);
+
+      // Log the Credco API response
+      this.logger.log('Credco API Response:', credcoResponse);
+
+      return credcoResponse;
+
     } catch (error) {
       throw new HttpException('Error getting credit score', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  
-  }
-  
 
+  }
+
+  private async getOAuthToken(): Promise<string> {
+    const oauthUrl = 'https://' + process.env.CRED_CO_TOKEN_HOST + process.env.CRED_CO_TOKEN_URL;
+    const authorizationHeader = 'Basic ' + process.env.CRED_CO_AUTHORIZATION;
+
+    try {
+      const response = await this.httpService.post(
+        oauthUrl,
+        null,
+        {
+          headers: {
+            Authorization: authorizationHeader,
+          },
+        }
+      ).toPromise();
+
+      return response.data.access_token;
+    } catch (error) {
+      throw new HttpException('Error getting OAuth token', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
   buildRequestBody(requestData: CredcoRequestDto) {
 
@@ -97,9 +103,9 @@ export class CreditScoreService {
 
                     <ns0:INDIVIDUAL>
                       <ns0:NAME>
-                        <ns0:FirstName>${requestData.firstName}</ns0:FirstName>
-                        <ns0:LastName>${requestData.lastName}</ns0:LastName>
-                        <ns0:MiddleName>${requestData.middleName}</ns0:MiddleName>
+                        <ns0:FirstName>${requestData.borrowerFirstName}</ns0:FirstName>
+                        <ns0:LastName>${requestData.borrowerLastName}</ns0:LastName>
+                        <ns0:MiddleName>${requestData.borrowerMiddleName}</ns0:MiddleName>
                       </ns0:NAME>
                     </ns0:INDIVIDUAL>
                 
@@ -108,7 +114,7 @@ export class CreditScoreService {
 
                         <ns0:BORROWER>
                           <ns0:BORROWER_DETAIL>
-                            <ns0:BorrowerBirthDate>${requestData.birthDate}</ns0:BorrowerBirthDate> 
+                            <ns0:BorrowerBirthDate>${requestData.borrowerDOB}</ns0:BorrowerBirthDate> 
                             <ns0:BorrowerClassificationType>Primary</ns0:BorrowerClassificationType>
                           </ns0:BORROWER_DETAIL>
                           <ns0:RESIDENCES>
@@ -116,13 +122,13 @@ export class CreditScoreService {
                             <ns0:ADDRESS>
                               <ns0:AddressFormatType>Individual</ns0:AddressFormatType>
                               <ns0:AddressType>Current</ns0:AddressType>
-                              <ns0:CityName>${requestData.city}</ns0:CityName>
-                              <ns0:CountryCode>${requestData.countryCode}</ns0:CountryCode>
-                              <ns0:PostalCode>${requestData.postalCode}</ns0:PostalCode>
-                              <ns0:StateCode>${requestData.stateCode}</ns0:StateCode>
-                              <ns0:StreetName>${requestData.streetName}</ns0:StreetName>
-                              <ns0:StreetPrimaryNumberText>${requestData.streetNumber}</ns0:StreetPrimaryNumberText>
-                              <ns0:StreetSuffixText>${requestData.streetSuffix}</ns0:StreetSuffixText>
+                              <ns0:CityName>${requestData.borrowerAddress.streetCity}</ns0:CityName>
+                              <ns0:CountryCode>${requestData.borrowerAddress.countryCode}</ns0:CountryCode>
+                              <ns0:PostalCode>${requestData.borrowerAddress.streetPostalCode}</ns0:PostalCode>
+                              <ns0:StateCode>${requestData.borrowerAddress.streetStateCode}</ns0:StateCode>
+                              <ns0:StreetName>${requestData.borrowerAddress.streetName}</ns0:StreetName>
+                              <ns0:StreetPrimaryNumberText>${requestData.borrowerAddress.streetPrimaryNumberText}</ns0:StreetPrimaryNumberText>
+                              <ns0:StreetSuffixText>${requestData.borrowerAddress.streetSuffixText}</ns0:StreetSuffixText>
                             </ns0:ADDRESS>
                             <ns0:RESIDENCE_DETAIL>
                               <ns0:BorrowerResidencyType>Current</ns0:BorrowerResidencyType> 
@@ -257,27 +263,32 @@ export class CreditScoreService {
   
   }
 
-  parseXmlResponse(xml: string) {
-
-    // Parse XML string into JS object
-    const parsed = xml2js.parseString(xml, { mergeAttrs: true });
-  
-    // Get credit score value
-    const creditScore = parsed.CreditReportResponse.CreditScore;
-  
-    // Return parsed credit score
-    return creditScore;
-  
+  private jsonToXml(jsonData: any): string {
+    const builder = new xml2js.Builder({ rootName: 'root' });
+    const xmlData = builder.buildObject(jsonData);
+    return xmlData;
   }
-  
-  transformScore(rawXml: string): string {
-    return rawXml; 
-  }
-  
 
+  async sendXmlToCredco(xmlData: string): Promise<string> {
+    // Replace this with your actual Credco API endpoint
+    const credcoApiUrl = 'https://your-credco-api-url';
+
+    try {
+      const response = await this.httpService.post(credcoApiUrl, xmlData, {
+        headers: {
+          'Content-Type': 'application/xml',
+        },
+        responseType: 'text', 
+      }).toPromise();
+
+      const responseData = response.data;
+
+      // Log the unparsed XML response from Credco to the terminal
+      this.logger.log('Credco Unparsed XML Response:', responseData);
+
+      return responseData;
+    } catch (error) {
+      throw new HttpException('Error sending XML to Credco API', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
-
-// Credit score model
-// export class CreditScore {
-//   value: number;
-// }
