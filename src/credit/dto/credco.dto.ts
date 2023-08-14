@@ -1,30 +1,8 @@
-import { IsString, IsBoolean, IsDateString, ValidateNested, IsUUID } from 'class-validator';
+import { IsUUID, IsString, IsDateString, IsBoolean, ValidateNested } from 'class-validator';
 import { PipeTransform, Injectable, ParseIntPipe, ParseBoolPipe } from '@nestjs/common';
-
-class CreditScoreDto {
-
-  @IsString()
-  borrowerFirstName: string;
-
-  @IsString()
-  borrowerMiddleName: string;
-
-  @IsString()
-  borrowerLastName: string;
-
-  @IsString()
-  borrowerNameSuffix: string;
-
-  @IsString()
-  borrowerSSN: string;
-
-  @IsString()
-  borrowerDOB: string;
-
-}
+import { Type } from 'class-transformer';
 
 class BorrowerAddressDto {
-
   @IsString()
   streetPrimaryNumberText: string;
 
@@ -45,81 +23,67 @@ class BorrowerAddressDto {
 
   @IsString()
   countryCode: string;
-
 }
 
-class CreditReportsDto {
+export class CreditReportsDto {
+  @IsBoolean()
+  includeEquifax: boolean;
 
-    @IsBoolean()
-    equifax: boolean;
-  
-    @IsBoolean()
-    experian: boolean;
-  
-    @IsBoolean()
-    transUnion: boolean;
-  
+  @IsBoolean()
+  includeExperian: boolean;
+
+  @IsBoolean()
+  includeTransUnion: boolean;
 }
-  
+
 export class CredcoRequestDto {
-
-  @IsUUID()
-  loanId: string;
+  @ValidateNested()
+  @Type(() => BorrowerAddressDto)
+  borrowerAddress: BorrowerAddressDto;
 
   @IsString()
-  loanType: string;
+  loanIdentifier: string;
+
+  @IsString()
+  loanIdentiferType: string;
 
   @IsString()
   loanOriginationSystemName: string;
 
   @IsString()
-  firstName: string;
+  partyRoleType: string;
 
   @IsString()
-  lastName: string;
-
-  @IsString() 
-  middleName: string;
-
-  @IsDateString()
-  birthDate: string;
+  creditReportRequestActionType: string;
 
   @IsString()
-  streetNumber: string;
+  creditReportType: string;
 
   @IsString()
-  streetName: string;
+  creditReportTypeOtherDescription: string;
 
   @IsString()
-  streetSuffix: string;
+  reportingInformationIdentifier: string;
 
   @IsString()
-  city: string;
+  reportingInformationName: string;
+
+  @ValidateNested()
+  @Type(() => CreditReportsDto)
+  CreditReports: CreditReportsDto;
 
   @IsString()
-  stateCode: string;
+  borrowerFirstName: string;
 
   @IsString()
-  postalCode: string;
+  borrowerMiddleName: string;
 
   @IsString()
-  countryCode: string;
+  borrowerLastName: string;
 
   @IsString()
-  ssn: string;
+  borrowerNameSuffix: string;
 
   @IsString()
-  legalEntityName: string;
-
-  @IsString()
-  requestedByName: string;
-
-  @IsString()
-  loginAccountIdentifier: string;
-
-  @IsString()
-  loginAccountPassword: string;
-
+  borrowerDOB: string;
 }
-
-

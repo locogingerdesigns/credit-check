@@ -1,27 +1,28 @@
-import { Controller, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpException, Logger } from '@nestjs/common';
 import { CreditScoreService } from './credit-score.service';
 import { CredcoRequestDto } from './dto/credco.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('credit-score')
 export class CreditScoreController {
+  private readonly logger = new Logger(CreditScoreController.name);
 
   constructor(private creditScoreService: CreditScoreService) {}
 
   @Post()
-  async getCreditScore(@Body() body: CredcoRequestDto) {
+  async getCreditScore(@Body() body: any) {
     try {
-      const scoreXml = await this.creditScoreService.getScore(body);
+      // Map incoming JSON data to CredcoRequestDto instance
+      const credcoRequest: CredcoRequestDto = plainToClass(CredcoRequestDto, body);
 
-      // You can parse the XML response and extract relevant data here
-      // For example: const parsedScore = this.creditScoreService.parseXmlResponse(scoreXml);
+      const scoreXml = await this.creditScoreService.getScore(credcoRequest);
 
       return {
         statusCode: HttpStatus.OK,
-        // Include parsedScore or other relevant data if needed
         xmlResponse: scoreXml,
       };
     } catch (error) {
-      // Handle errors gracefully and return appropriate error response
+      this.logger.error(`Error retrieving credit score: ${error.message}`, error.stack);
       throw new HttpException('Error retrieving credit score', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
