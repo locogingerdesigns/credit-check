@@ -37,35 +37,35 @@ export class AppService {
     }
   }
 
-  async getCreditReport(credcoRequest: CredcoRequestDto): Promise<any> {
-    try {
-      const xmlPayload = create({
-        ns0: {
-          MESSAGE: {
-            // Construct your XML payload for credit report using values from configuration and credcoRequest
-            // Refer to the YAML configuration for the correct structure
-          }
-        }
-      }).end({ prettyPrint: true });
+  // async getCreditReport(credcoRequest: CredcoRequestDto): Promise<any> {
+  //   try {
+  //     const xmlPayload = create({
+  //       ns0: {
+  //         MESSAGE: {
+  //           // Construct your XML payload for credit report using values from configuration and credcoRequest
+  //           // Refer to the YAML configuration for the correct structure
+  //         }
+  //       }
+  //     }).end({ prettyPrint: true });
 
-      this.logger.debug('Constructed XML payload for Credco API:', xmlPayload);
+  //     this.logger.debug('Constructed XML payload for Credco API:', xmlPayload);
 
-      const credcoApiEndpoint = 'https://credco-api-endpoint.com'; // Replace with actual endpoint
-      const credcoResponse = await this.httpService
-        .post(credcoApiEndpoint, xmlPayload, {
-          headers: { 'Content-Type': 'application/xml' },
-        })
-        .toPromise();
+  //     const credcoApiEndpoint = 'https://credco-api-endpoint.com'; // Replace with actual endpoint
+  //     const credcoResponse = await this.httpService
+  //       .post(credcoApiEndpoint, xmlPayload, {
+  //         headers: { 'Content-Type': 'application/xml' },
+  //       })
+  //       .toPromise();
 
-      this.logger.debug('Credco API response:', credcoResponse.data);
+  //     this.logger.debug('Credco API response:', credcoResponse.data);
 
-      // Process the Credco API response as needed
-      // ...
+  //     // Process the Credco API response as needed
+  //     // ...
 
-      return credcoResponse.data;
-    } catch (error) {
-      this.logger.error('Error processing data:', error.message);
-      throw new Error('Error processing data');
-    }
-  }
+  //     return credcoResponse.data;
+  //   } catch (error) {
+  //     this.logger.error('Error processing data:', error.message);
+  //     throw new Error('Error processing data');
+  //   }
+  // }
 }

@@ -37,53 +37,37 @@ export class CreditReportsDto {
 }
 
 export class CredcoRequestDto {
-  @ValidateNested()
-  @Type(() => BorrowerAddressDto)
-  borrowerAddress: BorrowerAddressDto;
-
-  @IsString()
+  party: {
+    borrowerFirstName: string;
+    borrowerMiddleName: string;
+    borrowerLastName: string;
+    borrowerNameSuffix: string;
+    borrowerSSN: string;
+    borrowerDOB: string;
+    borrowerAddress: {
+      streetPrimaryNumberText: string;
+      streetName: string;
+      streetSuffixText: string;
+      streetCity: string;
+      streetStateCode: string;
+      streetPostalCode: string;
+      countryCode: string;
+    };
+  };
+  CreditReports: {
+    includeEquifax: boolean;
+    includeExperian: boolean;
+    includeTransUnion: boolean;
+  };
   loanIdentifier: string;
-
-  @IsString()
-  loanIdentiferType: string;
-
-  @IsString()
+  loanIdentifierType: string;
   loanOriginationSystemName: string;
-
-  @IsString()
   partyRoleType: string;
-
-  @IsString()
   creditReportRequestActionType: string;
-
-  @IsString()
   creditReportType: string;
-
-  @IsString()
   creditReportTypeOtherDescription: string;
-
-  @IsString()
   reportingInformationIdentifier: string;
-
-  @IsString()
   reportingInformationName: string;
-
-  @ValidateNested()
-  @Type(() => CreditReportsDto)
-  CreditReports: CreditReportsDto;
-
-  @IsString()
-  borrowerFirstName: string;
-
-  @IsString()
-  borrowerMiddleName: string;
-
-  @IsString()
-  borrowerLastName: string;
-
-  @IsString()
-  borrowerNameSuffix: string;
-
-  @IsString()
-  borrowerDOB: string;
+  legalEntityName?: string;
 }
+

@@ -13,19 +13,34 @@ export class CreditScoreService {
   async getScore(requestData: CredcoRequestDto) {
     try {
 
-        // Get OAuth token
-        const token = await this.getOAuthToken();
+      // Get OAuth token
+      const token = await this.getOAuthToken();
 
-        // Set Authorization header with bearer token
-        const headers = {
-        Authorization: `Bearer ${token}`
-        };
+      // Set Authorization header with bearer token
+      const headers = {
+      Authorization: `Bearer ${token}`
+      };
 
-        const body = this.buildRequestBody(requestData);
+      const body = this.buildRequestBody(requestData);
 
-    
       // Make API request to correct endpoint 
-      const response = await this.httpService.post('https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit/v1/creditscore', body).toPromise();
+      const response = await this.httpService.post(
+        'https://limaone-elphi-credco-proxy-api.us-e1.cloudhub.io/api/credit',
+        body,
+        {
+          headers: {
+            // 'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
+            'User-Agent': 'PostmanRuntime/7.32.3',
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'no-cache',
+            'client_id': 'eb5ef25afc704758b65db4e644842520',
+            'client_secret': 'Bc9D0f5Ce0344130bc0552D53093c0de',
+          },
+        }
+      ).toPromise();
 
       // Log the JSON response for debugging
       this.logger.log('Corelogic API Response:', response.data);
@@ -37,7 +52,7 @@ export class CreditScoreService {
       const credcoResponse = await this.sendXmlToCredco(xml);
 
       // Log the Credco API response
-      this.logger.log('Credco API Response:', credcoResponse);
+      this.logger.log('Unparsed Credco API Response:', credcoResponse, 'xml');
 
       return credcoResponse;
 
@@ -84,8 +99,8 @@ export class CreditScoreService {
                     
                     <ns0:LOAN_IDENTIFIERS>
                       <ns0:LOAN_IDENTIFIER>
-                        <ns0:LoanIdentifier>${requestData.loanId}</ns0:LoanIdentifier>
-                        <ns0:LoanIdentifierType>${requestData.loanType}</ns0:LoanIdentifierType>
+                        <ns0:LoanIdentifier>${requestData.loanIdentifier}</ns0:LoanIdentifier>
+                        <ns0:LoanIdentifierType>${requestData.loanIdentifierType}</ns0:LoanIdentifierType>
                       </ns0:LOAN_IDENTIFIER>
                     </ns0:LOAN_IDENTIFIERS>
   
@@ -103,9 +118,9 @@ export class CreditScoreService {
 
                     <ns0:INDIVIDUAL>
                       <ns0:NAME>
-                        <ns0:FirstName>${requestData.borrowerFirstName}</ns0:FirstName>
-                        <ns0:LastName>${requestData.borrowerLastName}</ns0:LastName>
-                        <ns0:MiddleName>${requestData.borrowerMiddleName}</ns0:MiddleName>
+                        <ns0:FirstName>${requestData.party.borrowerFirstName}</ns0:FirstName>
+                        <ns0:LastName>${requestData.party.borrowerLastName}</ns0:LastName>
+                        <ns0:MiddleName>${requestData.party.borrowerMiddleName}</ns0:MiddleName>
                       </ns0:NAME>
                     </ns0:INDIVIDUAL>
                 
@@ -114,7 +129,7 @@ export class CreditScoreService {
 
                         <ns0:BORROWER>
                           <ns0:BORROWER_DETAIL>
-                            <ns0:BorrowerBirthDate>${requestData.borrowerDOB}</ns0:BorrowerBirthDate> 
+                            <ns0:BorrowerBirthDate>${requestData.party.borrowerDOB}</ns0:BorrowerBirthDate> 
                             <ns0:BorrowerClassificationType>Primary</ns0:BorrowerClassificationType>
                           </ns0:BORROWER_DETAIL>
                           <ns0:RESIDENCES>
@@ -122,13 +137,13 @@ export class CreditScoreService {
                             <ns0:ADDRESS>
                               <ns0:AddressFormatType>Individual</ns0:AddressFormatType>
                               <ns0:AddressType>Current</ns0:AddressType>
-                              <ns0:CityName>${requestData.borrowerAddress.streetCity}</ns0:CityName>
-                              <ns0:CountryCode>${requestData.borrowerAddress.countryCode}</ns0:CountryCode>
-                              <ns0:PostalCode>${requestData.borrowerAddress.streetPostalCode}</ns0:PostalCode>
-                              <ns0:StateCode>${requestData.borrowerAddress.streetStateCode}</ns0:StateCode>
-                              <ns0:StreetName>${requestData.borrowerAddress.streetName}</ns0:StreetName>
-                              <ns0:StreetPrimaryNumberText>${requestData.borrowerAddress.streetPrimaryNumberText}</ns0:StreetPrimaryNumberText>
-                              <ns0:StreetSuffixText>${requestData.borrowerAddress.streetSuffixText}</ns0:StreetSuffixText>
+                              <ns0:CityName>${requestData.party.borrowerAddress.streetCity}</ns0:CityName>
+                              <ns0:CountryCode>${requestData.party.borrowerAddress.countryCode}</ns0:CountryCode>
+                              <ns0:PostalCode>${requestData.party.borrowerAddress.streetPostalCode}</ns0:PostalCode>
+                              <ns0:StateCode>${requestData.party.borrowerAddress.streetStateCode}</ns0:StateCode>
+                              <ns0:StreetName>${requestData.party.borrowerAddress.streetName}</ns0:StreetName>
+                              <ns0:StreetPrimaryNumberText>${requestData.party.borrowerAddress.streetPrimaryNumberText}</ns0:StreetPrimaryNumberText>
+                              <ns0:StreetSuffixText>${requestData.party.borrowerAddress.streetSuffixText}</ns0:StreetSuffixText>
                             </ns0:ADDRESS>
                             <ns0:RESIDENCE_DETAIL>
                               <ns0:BorrowerResidencyType>Current</ns0:BorrowerResidencyType> 
@@ -138,7 +153,7 @@ export class CreditScoreService {
                         </ns0:BORROWER>
 
                       <ns0:ROLE_DETAIL>
-                        <ns0:PartyRoleType>Borrower</ns0:PartyRoleType> 
+                        <ns0:PartyRoleType>${requestData.partyRoleType}</ns0:PartyRoleType> 
                       </ns0:ROLE_DETAIL>  
 
                       </ns0:ROLE>
@@ -148,7 +163,7 @@ export class CreditScoreService {
                       <ns0:TAXPAYER_IDENTIFIER>
                         <ns0:TaxpayerIdentifierType>SocialSecurityNumber</ns0:TaxpayerIdentifierType>
                         <ns0:TaxpayerIdentifierValue>
-                          ${requestData.ssn} 
+                          ${requestData.party.borrowerSSN} 
                         </ns0:TaxpayerIdentifierValue>
                       </ns0:TAXPAYER_IDENTIFIER>
                     </ns0:TAXPAYER_IDENTIFIERS>
@@ -166,14 +181,14 @@ export class CreditScoreService {
                           <ns0:CREDIT_REQUEST_DATA ns1:label="CreditRequest001">
 
                             <ns0:CREDIT_REPOSITORY_INCLUDED>
-                              <ns0:CreditRepositoryIncludedEquifaxIndicator>true</ns0:CreditRepositoryIncludedEquifaxIndicator>
-                              <ns0:CreditRepositoryIncludedExperianIndicator>true</ns0:CreditRepositoryIncludedExperianIndicator>
-                              <ns0:CreditRepositoryIncludedTransUnionIndicator>true</ns0:CreditRepositoryIncludedTransUnionIndicator>
+                              <ns0:CreditRepositoryIncludedEquifaxIndicator>${requestData.CreditReports.includeEquifax}</ns0:CreditRepositoryIncludedEquifaxIndicator>
+                              <ns0:CreditRepositoryIncludedExperianIndicator>${requestData.CreditReports.includeExperian}</ns0:CreditRepositoryIncludedExperianIndicator>
+                              <ns0:CreditRepositoryIncludedTransUnionIndicator>${requestData.CreditReports.includeTransUnion}</ns0:CreditRepositoryIncludedTransUnionIndicator>
                             </ns0:CREDIT_REPOSITORY_INCLUDED>
 
                             <ns0:CREDIT_REQUEST_DATA_DETAIL>
-                              <ns0:CreditReportRequestActionType>Submit</ns0:CreditReportRequestActionType>
-                              <ns0:CreditReportType>Merge</ns0:CreditReportType>
+                              <ns0:CreditReportRequestActionType>${requestData.creditReportRequestActionType}</ns0:CreditReportRequestActionType>
+                              <ns0:CreditReportType>${requestData.creditReportType}</ns0:CreditReportType>
                               <ns0:CreditRequestType>Individual</ns0:CreditRequestType>
                             </ns0:CREDIT_REQUEST_DATA_DETAIL>
 
@@ -205,13 +220,13 @@ export class CreditScoreService {
                           </ns0:PREFERRED_RESPONSES>
                         </ns0:RETURN_TO>
                         <ns0:ROLE_DETAIL>
-                          <ns0:PartyRoleType>RequestingParty</ns0:PartyRoleType>
+                          <ns0:PartyRoleType>${requestData.partyRoleType}</ns0:PartyRoleType>
                         </ns0:ROLE_DETAIL>
                       </ns0:ROLE>
 
                       <ns0:ROLE SequenceNumber="2" ns1:label="RequestingParty002">
                         <ns0:REQUESTING_PARTY>
-                          <ns0:RequestedByName>${requestData.requestedByName}</ns0:RequestedByName>
+                          <ns0:RequestedByName>Lima One Capital</ns0:RequestedByName>
                           
                           <ns0:EXTENSION>
                             <ns0:OTHER>
@@ -240,7 +255,7 @@ export class CreditScoreService {
                     <ns0:ROLES>
                       <ns0:ROLE ns1:label="SubmittingParty001">
                         <ns0:ROLE_DETAIL>
-                          <ns0:PartyRoleType>SubmittingParty</ns0:PartyRoleType>
+                          <ns0:PartyRoleType>${requestData.partyRoleType}</ns0:PartyRoleType>
                         </ns0:ROLE_DETAIL>
                       </ns0:ROLE>
                     </ns0:ROLES>

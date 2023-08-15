@@ -1,5 +1,5 @@
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
-import { CreditReportService } from './credit-report.service';
+// import { CreditReportService } from './credit-report.service';
 import { CreditScoreService } from './credit-score.service';  
 import { CreditService } from './credit.service';
 
@@ -7,20 +7,20 @@ import { CreditService } from './credit.service';
 export class CreditController {
 
   constructor(
-    private creditReportService: CreditReportService,
+    // private creditReportService: CreditReportService,
     private creditScoreService: CreditScoreService,  
     private creditService: CreditService
   ) {}
 
-  @Post('v1/report')
-  async getCreditReport(@Body() body) {
-    const report = await this.creditReportService.getReport(body);
+  // @Post('v1/report')
+  // async getCreditReport(@Body() body) {
+  //   const report = await this.creditReportService.getReport(body);
     
-    return {
-      statusCode: HttpStatus.OK,
-      report: report
-    };
-  }
+  //   return {
+  //     statusCode: HttpStatus.OK,
+  //     report: report
+  //   };
+  // }
 
   @Post('v1/score')
   async getCreditScore(@Body() body) {
