@@ -12,8 +12,8 @@ export class AppController {
     return this.appService.getCreditScore(creditScoreRequest);
   }
 
-  @Post('credit-report')
-  async getCreditReport(@Body() creditReportRequest: CredcoRequestDto) {
-    return this.appService.getCreditReport(creditReportRequest);
-  }
+  // @Post('credit-report')
+  // async getCreditReport(@Body() creditReportRequest: CredcoRequestDto) {
+  //   return this.appService.getCreditReport(creditReportRequest);
+  // }
 }

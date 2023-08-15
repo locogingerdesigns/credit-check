@@ -69,5 +69,7 @@ export class CredcoRequestDto {
   reportingInformationIdentifier: string;
   reportingInformationName: string;
   legalEntityName?: string;
+  loginAccountIdentifier?: string;
+  loginAccountPassword?: string;
 }
 

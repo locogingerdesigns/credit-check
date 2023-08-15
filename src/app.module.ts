@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { CreditScoreModule } from './credit/credit-score.module';
-import { CreditReportModule } from './credit/credit-report.module';
+import { CreditModule } from './credit/credit.module';
+import { CreditService } from './credit/credit.service'; // Import CreditService here
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
     HttpModule,
-    CreditScoreModule, 
-    CreditReportModule, 
+    CreditModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CreditService], // Add CreditService to the providers array
 })
 export class AppModule {}

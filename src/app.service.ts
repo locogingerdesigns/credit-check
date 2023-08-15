@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { CreditScoreService } from './credit/credit-score.service';
+import { CreditService } from './credit/credit.service';
 import { CredcoRequestDto } from './credit/dto/credco.dto';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class AppService {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly creditScoreService: CreditScoreService, // Inject the CreditScoreService
+    private readonly creditScoreService: CreditService, // Inject the CreditScoreService
   ) {}
 
   async getCreditScore(creditScoreRequest: CredcoRequestDto): Promise<any> {
@@ -18,10 +18,17 @@ export class AppService {
 
       this.logger.debug('Constructed XML payload for Credco API:', xmlPayload);
 
-      const credcoApiEndpoint = 'https://credco-api-endpoint.com'; // Replace with actual endpoint
+      const credcoApiEndpoint = 'https://uat1.globalgateway.corelogic.com/order/creditservicerequest/credit?action=Submit';
+      // const authorizationHeader = 'Basic RdZUnoKU3h2bOAo6QfR1ginrF6bMWdaK:hwZjIYnfEAphpGeD';
+      const authorizationHeader = 'Basic RdZUnoKU3h2bOAo6QfR1ginrF6bMWdaKhwZjIYnfEAphpGeD';
+
+
       const credcoResponse = await this.httpService
         .post(credcoApiEndpoint, xmlPayload, {
-          headers: { 'Content-Type': 'application/xml' },
+          headers: {
+            'Content-Type': 'application/xml',
+            'Authorization': authorizationHeader, // Include the authorization header
+          },
         })
         .toPromise();
 
